@@ -1,0 +1,22 @@
+spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: "classpath:db/migration"
+    placeholders:
+          timezone: Europe/Kyiv
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/university_schedule_app
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+logging:
+  level:
+    root: INFO
+    ua.foxminded.school_console_app: DEBUG

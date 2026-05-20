@@ -1,0 +1,75 @@
+# Spring Initializr
+HELP.md
+
+# Maven Wrapper
+mvnw
+mvnw.cmd
+.mvn/wrapper/maven-wrapper.jar
+
+# Build targets (з інклюзіями для src)
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# JVM crash logs
+hs_err_pid*
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+
+# Mac
+.DS_Store
+
+# Maven logs
+log/
+logs/
+*.log
+
+# Inclusions
+!lib/**
+
+# Compiled Files
+*.class
+bin/
+build/
+/bin1/
+java/build/**

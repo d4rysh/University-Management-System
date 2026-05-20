@@ -1,0 +1,13 @@
+spring:
+  datasource:
+     driver-class-name: org.postgresql.Driver
+     url: jdbc:postgresql://localhost:5432/university_schedule_app
+     username: ${DB_USERNAME}
+     password: ${DB_PASSWORD}
+     hikari:
+           minimum-idle: 1
+           maximum-pool-size: 5
+     flyway:
+         enabled: true
+         placeholders:
+           timezone: Europe/Kyiv
