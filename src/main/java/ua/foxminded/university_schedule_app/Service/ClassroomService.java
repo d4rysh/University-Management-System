@@ -6,11 +6,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
+import ua.foxminded.university_schedule_app.Entity.GradeRecord;
 import ua.foxminded.university_schedule_app.JPARepositories.ClassroomRepository;
 
 @Service
@@ -38,10 +41,15 @@ public class ClassroomService {
     }
     
     @Transactional(readOnly = true)
-    public List<Classroom> getAllClassrooms() {
+    public Page<Classroom> getAllClassrooms(int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getAllClassrooms method.");
-        List<Classroom> classrooms = classroomRepository.findAll();
-            logger.debug("Retrieved {} classrooms from database.", classrooms.size());
+        Page<Classroom> classrooms = classroomRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return classrooms;
     }
     

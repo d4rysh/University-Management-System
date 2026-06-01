@@ -26,7 +26,7 @@ public class TimeSlotService {
     public TimeSlot addTimeSlot(TimeSlot timeSlot) {
         logger.info("Starting addTimeSlot for slot: {}.", timeSlot.getSlotName());
         TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlot);
-        logger.info("TimeSlot added successfully with id: {}", savedTimeSlot.getTimeslotId());
+        logger.info("TimeSlot added successfully with slot name: {}", savedTimeSlot.getSlotName());
         return savedTimeSlot;
     }
     
@@ -39,12 +39,12 @@ public class TimeSlotService {
 }
     
     @Transactional
-    public void deleteTimeSlot(Integer timeslotId) {
-        if (!timeSlotRepository.existsById(timeslotId)) {
-            throw new IllegalArgumentException("Timeslot with id " + timeslotId + " does not exist.");
+    public void deleteTimeSlot(String slotName) {
+        if (!timeSlotRepository.existsById(slotName)) {
+            throw new IllegalArgumentException("Timeslot with name" + slotName + " does not exist.");
         }
-        logger.info("Deleting timeslot with id: {}", timeslotId);
-        timeSlotRepository.deleteById(timeslotId);
+        logger.info("Deleting timeslot with name: {}", slotName);
+        timeSlotRepository.deleteById(slotName);
     }
     
     @Transactional(readOnly = true)

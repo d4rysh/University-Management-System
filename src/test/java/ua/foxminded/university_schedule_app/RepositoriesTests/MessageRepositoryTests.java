@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,16 +35,16 @@ public class MessageRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_messages.sql")
     void findBySenderUserIdOrderByTimestampDesc_shouldReturnMessages_whenExists() {
-        List<Message> messages = messageRepository.findBySender_UserIdOrderByTimestampDesc(2);
-        assertEquals(1, messages.size());
+        Page<Message> messages = messageRepository.findBySender_UserIdOrderByTimestampDesc(2, PageRequest.of(0, 10));
+        assertEquals(1, messages.getContent().size());
     }
 
     @Test
     @Transactional
     @Sql("/sql/insert_messages.sql")
     void findByReceiverUserIdOrderByTimestampDesc_shouldReturnMessages_whenExists() {
-        List<Message> messages = messageRepository.findByReceiver_UserIdOrderByTimestampDesc(3);
-        assertEquals(1, messages.size());
+        Page<Message> messages = messageRepository.findByReceiver_UserIdOrderByTimestampDesc(3, PageRequest.of(0, 15));
+        assertEquals(1, messages.getContent().size());
     }
 
     @Test

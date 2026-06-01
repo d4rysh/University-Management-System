@@ -30,7 +30,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     boolean existsByEmail(String email);
     
     //looking for students by LastName (for admin's fast search)
-    List<Student> findByLastName(String lastName);
+    List<Student> findByLastNameStartingWith(String lastName);
     
 }
 

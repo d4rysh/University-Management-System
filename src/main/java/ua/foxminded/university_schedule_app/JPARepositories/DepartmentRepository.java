@@ -20,7 +20,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
             JOIN d.teachers t
             WHERE t.userId = :teacherId
             """)
-    Optional<Department> findDepartmentByTeacherId(@Param("teacherId")Integer teacherId);
+    Optional<Department> findDepartmentByTeacherId(@Param("userId")Integer teacherId);
 
     boolean existsByDepartmentName (String deparmentName);
 }

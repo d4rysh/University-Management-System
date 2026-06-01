@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.JPARepositories.GroupRepository;
 
@@ -35,10 +38,15 @@ public class GroupService {
     }
     
     @Transactional(readOnly = true)
-    public List<Group> getAllGroups() {
+    public Page<Group> getAllGroups(int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getAllGroups method.");
-        List<Group> groups = groupRepository.findAll();
-            logger.debug("Retrieved {} groups from database.", groups.size());
+        Page<Group> groups = groupRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return groups;
 }
     
@@ -53,9 +61,9 @@ public class GroupService {
     
     
     @Transactional(readOnly = true)
-    public Optional<Group> getGroupByGroupId(Integer groupId) {
-        logger.info("Starting getGroupByGroupId method for group {}.", groupId);
-        return groupRepository.findByGroupId(groupId);
+    public Optional<Group> getGroupById(Integer groupId) {
+        logger.info("Starting getGroupById method for group {}.", groupId);
+        return groupRepository.findById(groupId);
     }
     
     @Transactional(readOnly = true)

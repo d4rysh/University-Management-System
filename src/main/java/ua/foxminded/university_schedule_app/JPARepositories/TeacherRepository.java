@@ -33,6 +33,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     List<Teacher> findTeachersByGroupId(@Param("groupId")Integer groupId);
     
   //looking for teachers by LastName (for admin's fast search)
-    List<Teacher> findByLastName(String lastName);
+    List<Teacher> findByLastNameStartingWith(String lastName);
     
 }

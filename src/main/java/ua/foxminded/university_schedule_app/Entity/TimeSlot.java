@@ -14,11 +14,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "timeslots")
 public class TimeSlot {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "timeslot_id")
-    private Integer timeslotId;
     
+    @Id
     @Column(name = "slot_name")
     private String slotName;
     
@@ -40,10 +37,6 @@ public class TimeSlot {
     }
     
     //getters
-    public Integer getTimeslotId() {
-        return timeslotId; 
-        }
-    
     public String getSlotName() {
         return slotName; 
         }
@@ -61,9 +54,6 @@ public class TimeSlot {
         }
     
     //setters
-    public void setTimeslotId(Integer timeslotId) {
-        this.timeslotId = timeslotId; 
-        }
     
     public void setSlotName(String slotName) {
         this.slotName = slotName; 

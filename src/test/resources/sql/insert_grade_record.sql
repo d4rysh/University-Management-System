@@ -1,16 +1,16 @@
 INSERT INTO users (user_id, first_name, last_name, password, gender, email)
-VALUES (2, 'Bob', 'Brown', 'pass123', 'Male', 'bob@example.com');
+VALUES (2, 'Bob', 'Brown', 'pass123', 'MALE', 'bob@example.com');
 
-INSERT INTO students (student_id, group_id)
+INSERT INTO students (user_id, group_id)
 VALUES (2, NULL);
 
 INSERT INTO users (user_id, first_name, last_name, password, gender, email)
-VALUES (3, 'John', 'Smith', 'pass456', 'Male', 'john@example.com');
+VALUES (3, 'John', 'Smith', 'pass456', 'MALE', 'john@example.com');
 
 INSERT INTO departments (department_id, department_name)
 VALUES (1, 'Mathematics Department');
 
-INSERT INTO teachers (teacher_id, department_id)
+INSERT INTO teachers (user_id, department_id)
 VALUES (3, 1);
 
 INSERT INTO courses (course_id, course_name, course_description, teacher_id)

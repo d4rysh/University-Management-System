@@ -32,7 +32,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public List<Admin> getAdminsByLastName(String lastName) {
         logger.info("Starting getAdminsByLastName method.");
-        List<Admin> admins = adminRepository.findByLastName(lastName);
+        List<Admin> admins = adminRepository.findByLastNameStartingWith(lastName);
         logger.debug("Retrieved {} admins from database by last name {}.", lastName);
         return admins;
     }

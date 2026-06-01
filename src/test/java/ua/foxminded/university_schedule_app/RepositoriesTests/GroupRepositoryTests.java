@@ -36,7 +36,7 @@ public class GroupRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_group.sql")
     void findByGroupId_shouldReturnGroup_whenExists() {
-        Optional<Group> group = groupRepository.findByGroupId(1);
+        Optional<Group> group = groupRepository.findById(1);
         assertTrue(group.isPresent());
         assertEquals("AA-95", group.get().getGroupName());
     }

@@ -73,7 +73,7 @@ public class StudentRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_students.sql")
     void findByLastName_shouldReturnStudents_whenExists() {
-        List<Student> students = studentRepository.findByLastName("Brown");
+        List<Student> students = studentRepository.findByLastNameStartingWith("Brown");
         assertEquals(1, students.size());
         assertEquals("Bob", students.get(0).getFirstName());
     }
@@ -82,7 +82,7 @@ public class StudentRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_students.sql")
     void findByLastName_shouldReturnEmpty_whenNotExists() {
-        List<Student> students = studentRepository.findByLastName("NotExists");
+        List<Student> students = studentRepository.findByLastNameStartingWith("NotExists");
         assertTrue(students.isEmpty());
     }
 }

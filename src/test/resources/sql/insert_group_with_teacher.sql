@@ -1,10 +1,10 @@
 INSERT INTO users (user_id, first_name, last_name, password, gender, email)
-VALUES (3, 'John', 'Smith', 'pass456', 'Male', 'john@example.com');
+VALUES (3, 'John', 'Smith', 'pass456', 'MALE', 'john@example.com');
 
 INSERT INTO departments (department_id, department_name)
 VALUES (1, 'Math Department');
 
-INSERT INTO teachers (teacher_id, department_id) 
+INSERT INTO teachers (user_id, department_id) 
 VALUES (3, 1);
 
 INSERT INTO groups (group_id, group_name)

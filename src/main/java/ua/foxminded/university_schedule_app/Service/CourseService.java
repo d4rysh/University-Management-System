@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Course;
 import ua.foxminded.university_schedule_app.JPARepositories.CourseRepository;
 
@@ -35,10 +38,15 @@ public class CourseService {
     }
     
     @Transactional(readOnly = true)
-    public List<Course> getAllCourses() {
+    public Page<Course> getAllCourses(int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getAllCourses method.");
-        List<Course> courses = courseRepository.findAll();
-        logger.debug("Retrieved {} courses from database.", courses.size());
+        Page<Course> courses = courseRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return courses;
 }
     

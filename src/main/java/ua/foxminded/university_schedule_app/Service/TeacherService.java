@@ -56,7 +56,7 @@ public class TeacherService {
     @Transactional(readOnly = true)
     public List<Teacher> getTeachersByLastName(String lastName) {
         logger.info("Starting getTeachersByLastName method.");
-        List<Teacher> teachers = teacherRepository.findByLastName(lastName);
+        List<Teacher> teachers = teacherRepository.findByLastNameStartingWith(lastName);
         logger.debug("Retrieved {} teachers from database by last name {}.", lastName);
         return teachers;
     }

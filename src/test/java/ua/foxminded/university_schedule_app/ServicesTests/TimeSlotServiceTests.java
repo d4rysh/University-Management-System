@@ -24,7 +24,6 @@ public class TimeSlotServiceTests {
 
     private TimeSlot getTimeSlotEntity() {
         TimeSlot slot = new TimeSlot();
-        slot.setTimeslotId(1);
         slot.setSlotName("First lesson");
         return slot;
     }
@@ -37,26 +36,25 @@ public class TimeSlotServiceTests {
         TimeSlot result = timeSlotService.addTimeSlot(slot);
 
         assertEquals("First lesson", result.getSlotName());
-        assertEquals(1, result.getTimeslotId());
         verify(timeSlotRepository).save(any(TimeSlot.class));
     }
 
     @Test
     void deleteTimeSlot_shouldThrowException_whenTimeSlotNotExists() {
-        when(timeSlotRepository.existsById(99)).thenReturn(false);
+        when(timeSlotRepository.existsById("First lesson")).thenReturn(false);
 
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> timeSlotService.deleteTimeSlot(99));
+                () -> timeSlotService.deleteTimeSlot("First lesson"));
 
         assertEquals("Timeslot with id 99 does not exist.", e.getMessage());
     }
 
     @Test
     void deleteTimeSlot_shouldDelete_whenTimeSlotExists() {
-        when(timeSlotRepository.existsById(1)).thenReturn(true);
+        when(timeSlotRepository.existsById("First lesson")).thenReturn(true);
 
-        timeSlotService.deleteTimeSlot(1);
+        timeSlotService.deleteTimeSlot("First lesson");
 
-        verify(timeSlotRepository).deleteById(1);
+        verify(timeSlotRepository).deleteById("First lesson");
     }
 }

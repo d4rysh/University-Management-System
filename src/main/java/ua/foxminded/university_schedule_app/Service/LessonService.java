@@ -7,10 +7,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Lesson;
 import ua.foxminded.university_schedule_app.JPARepositories.LessonRepository;
 
@@ -42,11 +45,17 @@ public class LessonService {
         return savedLesson;
     }
     
+    //1
     @Transactional(readOnly = true)
-    public List<Lesson> getAllLessons() {
+    public Page<Lesson> getAllLessons(int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getAllLessons method.");
-        List<Lesson> lessons = lessonRepository.findAll();
-            logger.debug("Retrieved {} lessons from database.", lessons.size());
+        Page<Lesson> lessons = lessonRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return lessons;
 }
     
@@ -58,24 +67,26 @@ public class LessonService {
         logger.info("Deleting lesson with id: {}", lessonId);
         lessonRepository.deleteById(lessonId);
     }
-    
-    
+ 
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsByGroupIdAndDate(Integer groupId, LocalDate startDate, LocalDate endDate) {
-        logger.info("Fetching lessons for group {} between {} and {}.", groupId, startDate, endDate);
-        return lessonRepository.findByGroup_GroupIdAndDateBetween(groupId, startDate, endDate);
+    public List<Lesson> getLessonsForWeekByGroupId(Integer groupId, LocalDate weekStart) {
+        LocalDate weekEnd = weekStart.plusDays(6);
+        logger.info("Fetching lessons for group {} between {} and {}.", groupId, weekStart, weekEnd);
+        return lessonRepository.findByGroup_GroupIdAndDateBetween(groupId, weekStart, weekEnd);
     }
     
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsByTeacherIdAndDate(Integer teacherId, LocalDate startDate, LocalDate endDate) {
-        logger.info("Fetching lessons for teacher {} between {} and {}.", teacherId, startDate, endDate);
-        return lessonRepository.findByTeacher_UserIdAndDateBetween(teacherId, startDate, endDate);
+    public List<Lesson> getLessonsForWeekByTeacherId(Integer teacherId, LocalDate weekStart) {
+        LocalDate weekEnd = weekStart.plusDays(6);
+        logger.info("Fetching lessons for teacher {} between {} and {}.", teacherId, weekStart, weekEnd);
+        return lessonRepository.findByTeacher_UserIdAndDateBetween(teacherId, weekStart, weekEnd);
     }
     
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsByCourseIdAndDate(Integer courseId, LocalDate startDate, LocalDate endDate) {
-        logger.info("Fetching lessons for course {} between {} and {}.", courseId, startDate, endDate);
-        return lessonRepository.findByCourse_CourseIdAndDateBetween(courseId, startDate, endDate);
+    public List<Lesson> getLessonsForWeekByCourseId(Integer courseId, LocalDate weekStart) {
+        LocalDate weekEnd = weekStart.plusDays(6);
+        logger.info("Fetching lessons for course {} between {} and {}.", courseId, weekStart, weekEnd);
+        return lessonRepository.findByCourse_CourseIdAndDateBetween(courseId, weekStart, weekEnd);
     }
     
   //all lessons in one day

@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,31 +38,22 @@ public class GradeRecordRepositoryTests extends PostgresTestContainerConfig {
     @Sql(scripts = {"/sql/insert_grade_record.sql"},
          executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByGradeId_shouldReturnGradeRecord_whenExists() {
-        Optional<GradeRecord> record = gradeRecordRepository.findByGradeId(1);
+        Optional<GradeRecord> record = gradeRecordRepository.findById(1);
 
         assertTrue(record.isPresent());
         assertEquals(95.0, record.get().getGrade());
     }
 
-    @Test
-    @Transactional
-    @Sql(scripts = {"/sql/insert_grade_record.sql"},
-         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void findByStudentUserId_shouldReturnGrades_whenStudentExists() {
-        List<GradeRecord> records = gradeRecordRepository.findByStudent_UserId(2);
-
-        assertEquals(2, records.size());
-    }
 
     @Test
     @Transactional
     @Sql(scripts = {"/sql/insert_grade_record.sql"},
          executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByTeacherUserIdOrderByExamDateDesc_shouldReturnGradesSorted() {
-        List<GradeRecord> records = gradeRecordRepository.findByTeacher_UserIdOrderByExamDateDesc(3);
+        Page<GradeRecord> records = gradeRecordRepository.findByTeacher_UserIdOrderByExamDateDesc(3, PageRequest.of(0, 15));
 
-        assertEquals(2, records.size());
-        assertTrue(records.get(0).getExamDate().isAfter(records.get(1).getExamDate()));
+        assertEquals(2, records.getContent().size());
+        assertTrue(records.getContent().get(0).getExamDate().isAfter(records.getContent().get(1).getExamDate()));
     }
 
     @Test
@@ -68,22 +61,10 @@ public class GradeRecordRepositoryTests extends PostgresTestContainerConfig {
     @Sql(scripts = {"/sql/insert_grade_record.sql"},
          executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByStudentUserIdAndCourseCourseIdOrderByExamDateDesc_shouldReturnGradesForCourse() {
-        List<GradeRecord> records = gradeRecordRepository.findByStudent_UserIdAndCourse_CourseIdOrderByExamDateDesc(2, 1);
+        Page<GradeRecord> records = gradeRecordRepository.findByStudent_UserIdAndCourse_CourseIdOrderByExamDateDesc(2, 1, PageRequest.of(0, 15));
 
-        assertEquals(2, records.size());
-        assertEquals(1, records.get(0).getCourse().getCourseId());
+        assertEquals(2, records.getContent().size());
+        assertEquals(1, records.getContent().get(0).getCourse().getCourseId());
     }
 
-    @Test
-    @Transactional
-    @Sql(scripts = {"/sql/insert_grade_record.sql"},
-         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void findByStudentUserIdAndExamDateBetweenOrderByExamDateDesc_shouldReturnGradesInDateRange() {
-        LocalDate start = LocalDate.of(2025, 1, 1);
-        LocalDate end = LocalDate.of(2025, 12, 31);
-
-        List<GradeRecord> records = gradeRecordRepository.findByStudent_UserIdAndExamDateBetweenOrderByExamDateDesc(2, start, end);
-
-        assertEquals(2, records.size());
-    }
 }

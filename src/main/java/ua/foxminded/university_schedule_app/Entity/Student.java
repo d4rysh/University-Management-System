@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "students")
-@PrimaryKeyJoinColumn(name = "student_id")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Student extends User{
     
     @ManyToOne

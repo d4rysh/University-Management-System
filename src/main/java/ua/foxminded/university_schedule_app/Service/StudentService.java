@@ -63,7 +63,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public List<Student> getStudentsByLastName(String lastName) {
         logger.info("Starting getStudentsByLastName method.");
-        List<Student> students = studentRepository.findByLastName(lastName);
+        List<Student> students = studentRepository.findByLastNameStartingWith(lastName);
         logger.debug("Retrieved {} students from database by last name {}.", lastName);
         return students;
     }

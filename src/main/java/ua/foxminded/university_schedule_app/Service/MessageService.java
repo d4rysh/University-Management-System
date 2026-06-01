@@ -1,15 +1,20 @@
 package ua.foxminded.university_schedule_app.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ua.foxminded.university_schedule_app.Entity.Lesson;
 import ua.foxminded.university_schedule_app.Entity.Message;
 import ua.foxminded.university_schedule_app.JPARepositories.MessageRepository;
 
@@ -44,10 +49,15 @@ public class MessageService {
     }
     
     @Transactional(readOnly = true)
-    public List<Message> getAllMessages() {
+    public Page<Message> getAllMessages(int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getAllMessages method.");
-        List<Message> messages = messageRepository.findAll();
-            logger.debug("Retrieved {} messages from database.", messages.size());
+        Page<Message> messages = messageRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return messages;
     }
     
@@ -70,26 +80,44 @@ public class MessageService {
     
   //all messages with filter (newest first):
     @Transactional(readOnly = true)
-    public List<Message> getMessageBySender(Integer senderId) {
+    public Page<Message> getMessageBySender(Integer senderId, int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getMessageBySender method for sender {}.", senderId);
-        return messageRepository.findBySender_UserIdOrderByTimestampDesc(senderId);
+        Page<Message> messages = messageRepository.findBySender_UserIdOrderByTimestampDesc(senderId, PageRequest.of(pageNumber, pageSize));
+        return messages;
     }
     
     @Transactional(readOnly = true)
-    public List<Message> getMessageByReceiver(Integer receiverId) {
+    public Page<Message> getMessageByReceiver(Integer receiverId, int pageNumber, int pageSize) {
+        if (pageNumber<0) {
+            throw new IllegalArgumentException("pageNumber must be 0 and over");
+        }
+        if (pageSize>15 || pageSize<=0) {
+            throw new IllegalArgumentException("pageSize must be from 1 to 15");
+        }
         logger.info("Starting getMessageByReceiver method for receiver {}.", receiverId);
-        return messageRepository.findByReceiver_UserIdOrderByTimestampDesc(receiverId);
+        Page<Message> messages = messageRepository.findByReceiver_UserIdOrderByTimestampDesc(receiverId, PageRequest.of(pageNumber, pageSize));
+        return messages;
     }
     
   //list of messages that day:
     @Transactional(readOnly = true)
-    public List<Message> getMessageBySenderAndTimestamp(Integer senderId, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<Message> getMessageBySenderAndDate(Integer senderId, LocalDate date) {
+        LocalDateTime startTime = date.atStartOfDay();
+        LocalDateTime endTime = date.atTime(LocalTime.MAX);
         logger.info("Fetching messages from sender {} between {} and {}.", senderId, startTime, endTime);
         return messageRepository.findBySender_UserIdAndTimestampBetweenOrderByTimestampDesc(senderId, startTime, endTime);
     }
     
     @Transactional(readOnly = true)
-    public List<Message> getMessageByReceiverAndTimestamp(Integer receiverId, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<Message> getMessageByReceiverAndDate(Integer receiverId, LocalDate date) {
+        LocalDateTime startTime = date.atStartOfDay();
+        LocalDateTime endTime = date.atTime(LocalTime.MAX);
         logger.info("Fetching messages for receiver {} between {} and {}.", receiverId, startTime, endTime);
         return messageRepository.findByReceiver_UserIdAndTimestampBetweenOrderByTimestampDesc(receiverId, startTime, endTime);
     }

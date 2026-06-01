@@ -12,7 +12,7 @@ import ua.foxminded.university_schedule_app.Entity.Group;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Integer> {
     
-    Optional<Group> findByGroupId(Integer groupId);
+    Optional<Group> findById(Integer groupId);
     
     Optional<Group> findByGroupName(String groupName);
     

@@ -50,7 +50,7 @@ public class AdminRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_admins.sql")
     void findByLastName_shouldReturnAdmins_whenExists() {
-        List<Admin> admins = adminRepository.findByLastName("Brown");
+        List<Admin> admins = adminRepository.findByLastNameStartingWith("Brown");
         assertEquals(1, admins.size());
         assertEquals("Bob", admins.get(0).getFirstName());
     }
@@ -59,7 +59,7 @@ public class AdminRepositoryTests extends PostgresTestContainerConfig {
     @Transactional
     @Sql("/sql/insert_admins.sql")
     void findByLastName_shouldReturnEmpty_whenNotExists() {
-        List<Admin> admins = adminRepository.findByLastName("NotExists");
+        List<Admin> admins = adminRepository.findByLastNameStartingWith("NotExists");
         assertTrue(admins.isEmpty());
     }
 }

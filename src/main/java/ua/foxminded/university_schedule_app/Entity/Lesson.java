@@ -35,7 +35,7 @@ public class Lesson {
     private Classroom classroom;
     
     @ManyToOne
-    @JoinColumn(name = "timeslot_id")
+    @JoinColumn(name = "slot_name")
     private TimeSlot timeSlot;
     
     @ManyToOne

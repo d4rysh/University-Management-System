@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.university_schedule_app.Entity.TimeSlot;
 
 @Repository
-public interface TimeSlotRepository extends JpaRepository<TimeSlot, Integer> {
+public interface TimeSlotRepository extends JpaRepository<TimeSlot, String> {
     
     Optional<TimeSlot> findBySlotName (String slotName);
     
