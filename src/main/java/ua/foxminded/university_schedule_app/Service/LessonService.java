@@ -16,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Lesson;
 import ua.foxminded.university_schedule_app.JPARepositories.LessonRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
 @Service
 public class LessonService {
@@ -48,12 +49,7 @@ public class LessonService {
     //1
     @Transactional(readOnly = true)
     public Page<Lesson> getAllLessons(int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getAllLessons method.");
         Page<Lesson> lessons = lessonRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return lessons;
@@ -69,24 +65,21 @@ public class LessonService {
     }
  
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsForWeekByGroupId(Integer groupId, LocalDate weekStart) {
-        LocalDate weekEnd = weekStart.plusDays(6);
-        logger.info("Fetching lessons for group {} between {} and {}.", groupId, weekStart, weekEnd);
-        return lessonRepository.findByGroup_GroupIdAndDateBetween(groupId, weekStart, weekEnd);
+    public List<Lesson> getLessonsByGroupIdAndDate(Integer groupId, LocalDate startDate, LocalDate endDate) {
+        logger.info("Fetching lessons for group {} between {} and {}.", groupId, startDate, endDate);
+        return lessonRepository.findByGroup_GroupIdAndDateBetween(groupId, startDate, endDate);
     }
     
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsForWeekByTeacherId(Integer teacherId, LocalDate weekStart) {
-        LocalDate weekEnd = weekStart.plusDays(6);
-        logger.info("Fetching lessons for teacher {} between {} and {}.", teacherId, weekStart, weekEnd);
-        return lessonRepository.findByTeacher_UserIdAndDateBetween(teacherId, weekStart, weekEnd);
+    public List<Lesson> getLessonsByTeacherIdAndDate(Integer teacherId, LocalDate startDate, LocalDate endDate) {
+        logger.info("Fetching lessons for teacher {} between {} and {}.", teacherId, startDate, endDate);
+        return lessonRepository.findByTeacher_UserIdAndDateBetween(teacherId, startDate, endDate);
     }
     
     @Transactional(readOnly = true)
-    public List<Lesson> getLessonsForWeekByCourseId(Integer courseId, LocalDate weekStart) {
-        LocalDate weekEnd = weekStart.plusDays(6);
-        logger.info("Fetching lessons for course {} between {} and {}.", courseId, weekStart, weekEnd);
-        return lessonRepository.findByCourse_CourseIdAndDateBetween(courseId, weekStart, weekEnd);
+    public List<Lesson> getLessonsByCourseIdAndDate(Integer courseId, LocalDate startDate, LocalDate endDate) {
+        logger.info("Fetching lessons for course {} between {} and {}.", courseId, startDate, endDate);
+        return lessonRepository.findByCourse_CourseIdAndDateBetween(courseId, startDate, endDate);
     }
     
   //all lessons in one day

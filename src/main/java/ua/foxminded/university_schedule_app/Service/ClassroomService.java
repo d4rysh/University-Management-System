@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.GradeRecord;
 import ua.foxminded.university_schedule_app.JPARepositories.ClassroomRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
 @Service
 public class ClassroomService {
@@ -42,12 +43,7 @@ public class ClassroomService {
     
     @Transactional(readOnly = true)
     public Page<Classroom> getAllClassrooms(int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getAllClassrooms method.");
         Page<Classroom> classrooms = classroomRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return classrooms;

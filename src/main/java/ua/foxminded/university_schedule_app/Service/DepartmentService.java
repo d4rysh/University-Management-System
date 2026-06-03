@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Department;
 import ua.foxminded.university_schedule_app.JPARepositories.DepartmentRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 @Service
 public class DepartmentService {
     private static final Logger logger = LoggerFactory.getLogger(CourseService.class);
@@ -38,12 +39,7 @@ public class DepartmentService {
     
     @Transactional(readOnly = true)
     public Page<Department> getAllDepartments(int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getAllDepartments method.");
         Page<Department> departments = departmentRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return departments;

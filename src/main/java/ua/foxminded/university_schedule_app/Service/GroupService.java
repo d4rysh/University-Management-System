@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.JPARepositories.GroupRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
 @Service
 public class GroupService {
@@ -39,12 +40,7 @@ public class GroupService {
     
     @Transactional(readOnly = true)
     public Page<Group> getAllGroups(int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getAllGroups method.");
         Page<Group> groups = groupRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return groups;

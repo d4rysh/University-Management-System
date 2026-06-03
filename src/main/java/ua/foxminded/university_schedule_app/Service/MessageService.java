@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.university_schedule_app.Entity.Lesson;
 import ua.foxminded.university_schedule_app.Entity.Message;
 import ua.foxminded.university_schedule_app.JPARepositories.MessageRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
 @Service
 public class MessageService {
@@ -50,12 +51,7 @@ public class MessageService {
     
     @Transactional(readOnly = true)
     public Page<Message> getAllMessages(int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getAllMessages method.");
         Page<Message> messages = messageRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return messages;
@@ -81,12 +77,7 @@ public class MessageService {
   //all messages with filter (newest first):
     @Transactional(readOnly = true)
     public Page<Message> getMessageBySender(Integer senderId, int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getMessageBySender method for sender {}.", senderId);
         Page<Message> messages = messageRepository.findBySender_UserIdOrderByTimestampDesc(senderId, PageRequest.of(pageNumber, pageSize));
         return messages;
@@ -94,12 +85,7 @@ public class MessageService {
     
     @Transactional(readOnly = true)
     public Page<Message> getMessageByReceiver(Integer receiverId, int pageNumber, int pageSize) {
-        if (pageNumber<0) {
-            throw new IllegalArgumentException("pageNumber must be 0 and over");
-        }
-        if (pageSize>15 || pageSize<=0) {
-            throw new IllegalArgumentException("pageSize must be from 1 to 15");
-        }
+        PaginationValidator.validatePagination(pageNumber, pageSize);
         logger.info("Starting getMessageByReceiver method for receiver {}.", receiverId);
         Page<Message> messages = messageRepository.findByReceiver_UserIdOrderByTimestampDesc(receiverId, PageRequest.of(pageNumber, pageSize));
         return messages;

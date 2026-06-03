@@ -44,27 +44,28 @@ public class GradeRecordRepositoryTests extends PostgresTestContainerConfig {
         assertEquals(95.0, record.get().getGrade());
     }
 
-
     @Test
     @Transactional
     @Sql(scripts = {"/sql/insert_grade_record.sql"},
          executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void findByTeacherUserIdOrderByExamDateDesc_shouldReturnGradesSorted() {
-        Page<GradeRecord> records = gradeRecordRepository.findByTeacher_UserIdOrderByExamDateDesc(3, PageRequest.of(0, 15));
-
-        assertEquals(2, records.getContent().size());
-        assertTrue(records.getContent().get(0).getExamDate().isAfter(records.getContent().get(1).getExamDate()));
-    }
-
-    @Test
-    @Transactional
-    @Sql(scripts = {"/sql/insert_grade_record.sql"},
-         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void findByStudentUserIdAndCourseCourseIdOrderByExamDateDesc_shouldReturnGradesForCourse() {
+    void findByStudentUserIdAndCourseCourseIdOrderByExamDateDesc_shouldReturnAllExamAttemptsForCourse() {
         Page<GradeRecord> records = gradeRecordRepository.findByStudent_UserIdAndCourse_CourseIdOrderByExamDateDesc(2, 1, PageRequest.of(0, 15));
 
         assertEquals(2, records.getContent().size());
         assertEquals(1, records.getContent().get(0).getCourse().getCourseId());
+        assertTrue(records.getContent().get(0).getExamDate().isAfter(records.getContent().get(1).getExamDate()));
+    }
+    
+    @Test
+    @Transactional
+    @Sql(scripts = {"/sql/insert_grade_record.sql"},
+         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    void findByTeacherUserIdAndCourseCourseIdOrderByExamDateDesc_shouldReturnAllExamAttemptsForCourse() {
+        Page<GradeRecord> records = gradeRecordRepository.findByTeacher_UserIdAndCourse_CourseIdOrderByExamDateDesc(3, 1, PageRequest.of(0, 15));
+
+        assertEquals(2, records.getContent().size());
+        assertEquals(1, records.getContent().get(0).getCourse().getCourseId());
+        assertTrue(records.getContent().get(0).getExamDate().isAfter(records.getContent().get(1).getExamDate()));
     }
 
 }

@@ -84,5 +84,6 @@ student_id INT REFERENCES students(user_id) ON DELETE CASCADE,
 course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,
 grade DECIMAL(4, 1) NOT NULL,
 teacher_id INT REFERENCES teachers(user_id) ON DELETE SET NULL,
-exam_date DATE NOT NULL
+exam_date DATE NOT NULL,
+UNIQUE(student_id, course_id, exam_date)
 );

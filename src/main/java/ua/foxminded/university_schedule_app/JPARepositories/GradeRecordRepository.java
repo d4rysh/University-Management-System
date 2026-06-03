@@ -14,17 +14,14 @@ import ua.foxminded.university_schedule_app.Entity.GradeRecord;
 @Repository
 public interface GradeRecordRepository extends JpaRepository<GradeRecord, Integer> {
     
-    Optional<GradeRecord> findById(Integer gradeId);
-    
     //newest first:
  // All grades of a student, newest first
     Page<GradeRecord> findByStudent_UserIdOrderByExamDateDesc (Integer studentId, Pageable pageable);
-   
-    Page<GradeRecord> findByTeacher_UserIdOrderByExamDateDesc (Integer teacherId, Pageable pageable);
-   
+    
    //all student's grades for one course (filter) , newest first
     Page<GradeRecord> findByStudent_UserIdAndCourse_CourseIdOrderByExamDateDesc (Integer studentId, Integer courseId, Pageable pageable);
    
     Page<GradeRecord> findByStudent_UserIdAndTeacher_UserIdOrderByExamDateDesc (Integer studentId, Integer teacherId, Pageable pageable);
 
+    Page<GradeRecord> findByTeacher_UserIdAndCourse_CourseIdOrderByExamDateDesc(Integer teacherId, Integer courseId, Pageable pageable);
 }
