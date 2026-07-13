@@ -16,6 +16,9 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 5
+  thymeleaf:
+    cache: false
+    
 logging:
   level:
     root: INFO

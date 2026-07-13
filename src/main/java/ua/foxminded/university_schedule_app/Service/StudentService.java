@@ -5,12 +5,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ua.foxminded.university_schedule_app.Entity.Classroom;
+import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.Entity.Student;
 import ua.foxminded.university_schedule_app.JPARepositories.GroupRepository;
 import ua.foxminded.university_schedule_app.JPARepositories.StudentRepository;
+import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
 @Service
 public class StudentService {
@@ -30,6 +35,35 @@ public class StudentService {
         List<Student> students = studentRepository.findAll();
         logger.debug("Retrieved {} students from database.", students.size());
         return students;
+    }
+    
+    @Transactional
+    public Student addStudent(Student student) {
+        logger.info("Starting addStudent method.");
+        return studentRepository.save(student);
+    }
+    
+    @Transactional
+    public void addStudentToGroup(Integer userId, Integer groupId) {
+        logger.info("Starting addStudentToGroup method.");
+        Student student = studentRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Student with id " + userId + " does not exist."));
+
+            Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group with id " + groupId + " does not exist."));
+
+            student.setGroup(group);
+            logger.debug("Added student {} to group {}.", userId, groupId);
+    }
+    
+    @Transactional
+    public void removeStudentFromGroup(Integer userId) {
+        logger.info("Starting removeStudentFromGroup method.");
+        Student student = studentRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Student with id " + userId + " does not exist."));
+
+            student.setGroup(null);
+            logger.debug("Removed student {} from group", userId);
     }
     
     @Transactional(readOnly = true)
@@ -61,10 +95,25 @@ public class StudentService {
     }
     
     @Transactional(readOnly = true)
-    public List<Student> getStudentsByLastName(String lastName) {
-        logger.info("Starting getStudentsByLastName method.");
-        List<Student> students = studentRepository.findByLastNameStartingWith(lastName);
-        logger.debug("Retrieved {} students from database by last name {}.", lastName);
+    public List<Student> getStudentsWithoutGroup() {
+        logger.info("Starting getStudentsWithoutGroup method.");
+        List<Student> students = studentRepository.findByGroupIsNull();
+        return students;
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<Student> searchStudentsByLastName(String lastName, int pageNumber, int pageSize) {
+      PaginationValidator.validatePagination(pageNumber, pageSize);
+      logger.info("Starting searchStudentsByLastName method.");
+      Page<Student> students = studentRepository.findByLastNameContainingIgnoreCase(lastName, PageRequest.of(pageNumber, pageSize));
+      return students;
+  }
+  
+    @Transactional(readOnly = true)
+    public List<Student> searchStudentsWithoutGroupByLastName(String lastName) {
+        logger.info("Starting searchStudentsWithoutGroupByLastName method.");
+        List<Student> students = studentRepository.findByGroupIsNullAndLastNameContainingIgnoreCase(lastName);
+        logger.debug("Retrieved {} students without group matching last name '{}'.", students.size(), lastName);
         return students;
     }
     

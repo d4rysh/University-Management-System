@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniMS</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/global.css}"/>
+
+    <style>
+  
+      body {
+        background-image: url('/wallpaperHomePage.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        height: 100vh;
+        margin: 0;
+      }
+
+      /* logo in the left corner */
+      .logo-pill {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(210, 197, 155, 0.85);
+        border: 1.5px solid rgba(160, 140, 90, 0.5);
+        border-radius: 999px;
+        padding: 8px 20px;
+        text-decoration: none;
+      }
+
+      .logo-pill span {
+        font-size: 15px;
+        font-weight: 700;
+        color: #5a4e38;
+        letter-spacing: 0.03em;
+      }
+
+      .logo-pill i {
+        font-size: 18px;
+        color: #5a4e38;
+      }
+
+      /* Log In */
+      .login-card {
+        background-color: rgba(210, 197, 155, 0.88);
+        border: 2px solid rgba(180, 160, 110, 0.5);
+        border-radius: 24px;
+        width: 340px;
+        padding: 32px 36px 36px;
+      }
+
+      .login-card h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #4a3f2e;
+        text-align: center;
+        margin-bottom: 28px;
+        letter-spacing: 0.02em;
+      }
+
+      /* enter forms */
+      .login-card .form-control {
+        background-color: rgba(235, 222, 185, 0.75);
+        border: none;
+        border-radius: 999px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        color: #5a4e38;
+        margin-bottom: 14px;
+      }
+
+      .login-card .form-control::placeholder {
+        color: #9a8a6a;
+        font-weight: 300;
+      }
+
+      .login-card .form-control:focus {
+        background-color: rgba(235, 222, 185, 0.95);
+        box-shadow: 0 0 0 2px rgba(140, 120, 70, 0.3);
+        outline: none;
+      }
+
+      /* remember me */
+      .remember-label {
+        font-size: 0.88rem;
+        color: #6a5c44;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 300;
+      }
+
+      .remember-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #7a6a50;
+        cursor: pointer;
+      }
+
+      /* Sign in button */
+      .btn-signin {
+        display: block;
+        width: 60%;
+        margin: 0 auto;
+        background-color: #5a4e38;
+        color: #e8d9b0;
+        border: none;
+        border-radius: 999px;
+        padding: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .btn-signin:hover {
+        background-color: #4a3f2e;
+        color: #f0e4c0;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- logo -->
+    <div class="logo-pill">
+      <i class="bi bi-mortarboard-fill"></i>
+      <span>UniMS</span>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center vh-100">
+      <div class="login-card">
+
+        <h2>Log In</h2>
+
+        <input type="email" class="form-control" placeholder="Enter your email">
+        <input type="password" class="form-control" placeholder="Enter your password">
+
+        <label class="remember-label">
+          <input type="checkbox"> remember me
+        </label>
+
+        <button class="btn-signin" onclick="window.location.href='/home'">Sign in</button>
+
+      </div>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  </body>
+</html> 

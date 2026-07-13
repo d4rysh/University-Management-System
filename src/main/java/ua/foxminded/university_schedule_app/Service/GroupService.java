@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
+import ua.foxminded.university_schedule_app.Entity.Course;
 import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.JPARepositories.GroupRepository;
 import ua.foxminded.university_schedule_app.Util.PaginationValidator;
@@ -90,6 +91,14 @@ public class GroupService {
     public List<Group> getGroupsByTeacher(Integer teacherId) {
         logger.info("Starting getGroupsByTeacher method for teacher {}.", teacherId);
         return groupRepository.findGroupsByUserId(teacherId);
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<Group> searchByGroupName(String groupName, int pageNumber, int pageSize) {
+        PaginationValidator.validatePagination(pageNumber, pageSize);
+        logger.info("Starting searchByGroupName method for: {}.", groupName);
+        Page<Group> groups = groupRepository.findByGroupNameContainingIgnoreCase(groupName, PageRequest.of(pageNumber, pageSize));
+        return groups;
     }
  
 }

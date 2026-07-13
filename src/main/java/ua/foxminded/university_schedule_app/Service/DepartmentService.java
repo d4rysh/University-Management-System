@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.Department;
+import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.JPARepositories.DepartmentRepository;
 import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 @Service
@@ -46,7 +47,7 @@ public class DepartmentService {
 }
     
     @Transactional
-    public void deleteCourse(Integer departmentId) {
+    public void deleteDepartment(Integer departmentId) {
         if (!departmentRepository.existsById(departmentId)) {
             throw new EntityNotFoundException("Department not found with id: " + departmentId);
         }
@@ -59,6 +60,14 @@ public class DepartmentService {
     public Optional<Department> getDepartmentDepartmentName(String departmentName) {
         logger.info("Starting getDepartmentDepartmentName method for: {}.", departmentName);
         return departmentRepository.findByDepartmentName(departmentName);
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<Department> searchByDepartmentName(String departmentName, int pageNumber, int pageSize) {
+        PaginationValidator.validatePagination(pageNumber, pageSize);
+        logger.info("Starting searchByDepartmentName method for: {}.", departmentName);
+        Page<Department> departments = departmentRepository.findByDepartmentNameContainingIgnoreCase(departmentName, PageRequest.of(pageNumber, pageSize));
+        return departments;
     }
    
     

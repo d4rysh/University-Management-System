@@ -73,4 +73,11 @@ public class CourseService {
         return courseRepository.existsByCourseName(courseName);
     }
     
+    @Transactional(readOnly = true)
+    public Page<Course> searchByCourseName(String courseName, int pageNumber, int pageSize) {
+        PaginationValidator.validatePagination(pageNumber, pageSize);
+        logger.info("Starting searchByCourseName method for: {}.", courseName);
+        Page<Course> courses = courseRepository.findByCourseNameContainingIgnoreCase(courseName, PageRequest.of(pageNumber, pageSize));
+        return courses;
+    }
 }

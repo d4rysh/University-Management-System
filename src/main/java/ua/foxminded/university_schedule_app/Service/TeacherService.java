@@ -1,6 +1,7 @@
 package ua.foxminded.university_schedule_app.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Teacher;
 import ua.foxminded.university_schedule_app.JPARepositories.TeacherRepository;
 
@@ -59,6 +61,11 @@ public class TeacherService {
         List<Teacher> teachers = teacherRepository.findByLastNameStartingWith(lastName);
         logger.debug("Retrieved {} teachers from database by last name {}.", lastName);
         return teachers;
+    }
+    
+    @Transactional(readOnly = true)
+    public Optional<Teacher> getTeacherById(Integer userId) {
+        return teacherRepository.findById(userId);
     }
     
 }

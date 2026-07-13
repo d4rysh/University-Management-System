@@ -2,6 +2,8 @@ package ua.foxminded.university_schedule_app.JPARepositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,7 +32,12 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     boolean existsByEmail(String email);
     
     //looking for students by LastName (for admin's fast search)
-    List<Student> findByLastNameStartingWith(String lastName);
+    Page<Student> findByLastNameContainingIgnoreCase(String lastName, Pageable pageable);
     
+    List<Student> findByGroupIsNull();
+    
+    List<Student> findByGroupIsNullAndLastNameContainingIgnoreCase(String lastName);
+    
+        Page<Student> findByGroupIsNull(Pageable pageable);
 }
 

@@ -3,6 +3,8 @@ package ua.foxminded.university_schedule_app.JPARepositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     
     boolean existsByCourseName(String courseName);
     
+    Page<Course> findByCourseNameContainingIgnoreCase(String courseName, Pageable pageable);
+    
+    List<Course> findByCourseNameContainingIgnoreCaseAndTeacher_UserId(String courseName, Integer userId);
 }

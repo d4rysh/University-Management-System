@@ -1,0 +1,13 @@
+package ua.foxminded.university_schedule_app.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class WelcomePage {
+
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+}

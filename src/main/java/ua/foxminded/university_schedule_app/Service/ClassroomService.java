@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.university_schedule_app.Entity.Classroom;
 import ua.foxminded.university_schedule_app.Entity.GradeRecord;
+import ua.foxminded.university_schedule_app.Entity.Group;
 import ua.foxminded.university_schedule_app.JPARepositories.ClassroomRepository;
 import ua.foxminded.university_schedule_app.Util.PaginationValidator;
 
@@ -62,6 +63,14 @@ public class ClassroomService {
     public Optional<Classroom> getClassroomByRoomNumber(int roomNumber) {
         logger.info("Starting getClassroomByRoomNumber method for classroom {}.", roomNumber);
         return classroomRepository.findByRoomNumber(roomNumber);
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<Classroom> searchByRoomNumber(int roomNumber, int pageNumber, int pageSize) {
+        PaginationValidator.validatePagination(pageNumber, pageSize);
+        logger.info("Starting searchByRoomNumber method for room {}.", roomNumber);
+        Page<Classroom> classrooms = classroomRepository.findByRoomNumber(roomNumber, PageRequest.of(pageNumber, pageSize));
+        return classrooms;
     }
     
     @Transactional(readOnly = true)

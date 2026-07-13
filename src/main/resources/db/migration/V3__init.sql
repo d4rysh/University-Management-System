@@ -1,0 +1,2 @@
+ALTER TABLE courses
+ALTER COLUMN teacher_id SET NOT NULL;
